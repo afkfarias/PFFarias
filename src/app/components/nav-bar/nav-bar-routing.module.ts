@@ -22,8 +22,7 @@ const routes: Routes = [
     path: 'alumnos',
     data: {
       title: 'Listado de alumnos',
-    },
-    canActivate: [adminGuard],
+    },    
     loadChildren: () =>
       import('../alumnos/alumnos.module').then(
         (m) => m.AlumnosModule
@@ -51,6 +50,7 @@ const routes: Routes = [
     data: {
       title: 'Listado de usuarios',
     },
+    canActivate: [adminGuard],
     loadChildren: () =>
       import('../users/users.module').then(
         (m) => m.UsersModule

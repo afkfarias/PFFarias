@@ -13,7 +13,19 @@ export class InscripcionesService {
 
   getInscripciones(): Observable<IInscripcion[]> {
     return this.httpClient.get<IInscripcion[]>(
-      environment.baseAPIURL + '/registrations'
+      environment.baseAPIURL + '/registrations?_embed=user&_embed=student&_embed=course'
+    );
+  }
+
+  getInscripcionesByStudentId(uid: string): Observable<IInscripcion[]> {
+    return this.httpClient.get<IInscripcion[]>(
+      `${environment.baseAPIURL}/registrations?studentId=${uid}&_embed=course`
+    );
+  }
+
+  getInscripcionesByCourseId(uid: string): Observable<IInscripcion[]> {
+    return this.httpClient.get<IInscripcion[]>(
+      `${environment.baseAPIURL}/registrations?courseId=${uid}&_embed=student`
     );
   }
 
@@ -26,7 +38,7 @@ export class InscripcionesService {
 
   deleteInscripcionById(id: string): Observable<IInscripcion> {
     return this.httpClient.delete<IInscripcion>(
-      environment.baseAPIURL + '/registration/' + id
+      environment.baseAPIURL + '/registrations/' + id
     );
   }
 }

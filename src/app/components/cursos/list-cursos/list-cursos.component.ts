@@ -4,6 +4,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { CursosService } from '../../../core/cursos/cursos.service';
 import { CursoDetailComponent } from '../curso-detail/curso-detail.component';
 import Swal from 'sweetalert2';
+import { IUser } from '../../users/models';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { authUser } from '../../../store/auth/auth.selectors';
+import { selectCursos, selectIsLoading } from '../store/curso.selectors';
+import { CursoActions } from '../store/curso.actions';
 
 @Component({
   selector: 'app-list-cursos',
@@ -11,9 +17,12 @@ import Swal from 'sweetalert2';
   styleUrl: './list-cursos.component.scss'
 })
 export class ListCursosComponent {
-  idNewAlumno = 4;
+  authUser$: Observable<IUser | null>;
   cursos: ICurso[] = [];
   loading = false;
+
+  loadingCursos$: Observable<boolean>;
+  cursos$: Observable<ICurso[]>;
 
   displayedColumns: string[] = [
     'id',
@@ -24,7 +33,11 @@ export class ListCursosComponent {
     'actions'
   ];
 
-  constructor(private matDialog: MatDialog, private cursosService: CursosService) {}
+  constructor(private matDialog: MatDialog, private cursosService: CursosService, private store: Store) {
+    this.authUser$ = this.store.select(authUser);
+    this.cursos$ = this.store.select(selectCursos);
+    this.loadingCursos$ = this.store.select(selectIsLoading);
+  }
 
   ngOnInit(): void {
     this.loading = true;
@@ -32,38 +45,23 @@ export class ListCursosComponent {
   }
 
   loadCursos() {
-    this.cursosService.getCursos().subscribe({
-      next: (cursos) => {
-        this.cursos = cursos;
-      },
-      complete: () => {this.loading = false;}
-    })
+    this.store.dispatch(CursoActions.loadCursos());
   }
 
-  openDialog(editCuso?: ICurso): void {
+  openDialog(editCurso?: ICurso, editMode?: boolean): void {
     this.matDialog
       .open(CursoDetailComponent, {
-        data: editCuso,
+        data: {editCurso , editMode},
       })
       .afterClosed()
       .subscribe({
         next: (result) => {
           if (result) {
-            if (editCuso) {
-              console.log(editCuso)
-              this.cursosService.updateCurso(editCuso.id, result).subscribe( (curso) => {
-                this.cursosService.getCursos().subscribe( (cursos) => {
-                  this.cursos = cursos;
-                });
-              })
+            if (editCurso) {
+              this.store.dispatch( CursoActions.updateCurso({id:editCurso.id, payload: result}));
             } else {
-              console.log(result)
               result.createdAt = new Date();
-              this.cursosService.createCurso(result).subscribe({
-                next: (cursoCreado) => {
-                  this.cursos = [...this.cursos, cursoCreado];
-                },
-              })
+              this.store.dispatch( CursoActions.createCurso({payload: result}));
             }
           }
         },
@@ -80,16 +78,7 @@ export class ListCursosComponent {
       confirmButtonText: "Aceptar"
     }).then((result) => {
       if (result.isConfirmed) {
-        this.cursosService.deleteCurso(id).subscribe((cursos) => {
-          this.cursosService.getCursos().subscribe( (cursos) => {
-            this.cursos = cursos
-          });
-          Swal.fire({
-          title: "Eliminado!",
-          text: "El curso ha sido eliminado.",
-          icon: "success"
-          });
-        })
+        this.store.dispatch( CursoActions.deleteCursoById({id}));
       }
     });
   }

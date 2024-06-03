@@ -6,12 +6,14 @@ export const inscripcioneFeatureKey = 'inscripcione';
 
 export interface State {
   inscripciones: IInscripcion[];
-  isLoading: boolean;
+  isLoading: boolean;  
+  error: unknown;
 }
 
 export const initialState: State = {
   inscripciones: [],
-  isLoading: false
+  isLoading: false,  
+  error: null
 };
 
 export const reducer = createReducer(
@@ -29,7 +31,13 @@ export const reducer = createReducer(
       inscripciones: action.data,
     };
   }),
-  on(InscripcioneActions.loadInscripcionesFailure, (state, action) => state),
+  on(InscripcioneActions.loadInscripcionesFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error,
+      isLoading: false,
+    };
+  }),
 
   on(InscripcioneActions.createInscripcion, (state) =>  {
     return {
@@ -53,6 +61,53 @@ export const reducer = createReducer(
       error: action.error,
     };
   }),
+
+  on(InscripcioneActions.deleteInscripcionById, (state) => ({
+    ...state,
+    isLoading: true,
+  })),
+  on(InscripcioneActions.deleteInscripcionByIdSuccess, (state, action) => ({
+    ...state,
+    isLoading: false,
+    inscripciones: state.inscripciones.filter((el) => el.id !== action.data.id),
+  })),
+  on(InscripcioneActions.deleteInscripcionByIdFailure, (state, action) => ({
+    ...state,
+    isLoading: false,
+    error: action.error,
+  })),
+
+  on(InscripcioneActions.loadInscripcionesByStudentId, (state) => ({
+    ...state,
+    isLoading: true,
+  })),
+  on(InscripcioneActions.loadInscripcionesByStudentIdSuccess, (state, action) => ({
+    ...state,
+    isLoading: false,
+    inscripciones: action.data,
+  })),
+  on(InscripcioneActions.loadInscripcionesByStudentIdFailure, (state, action) => ({
+    ...state,
+    isLoading: false,
+    error: action.error,
+  })),
+
+  on(InscripcioneActions.loadInscripcionesByCourseId, (state) => ({
+    ...state,
+    isLoading: true,
+  })),
+  on(InscripcioneActions.loadInscripcionesByCourseIdSuccess, (state, action) => ({
+    ...state,
+    isLoading: false,
+    inscripciones: action.data,
+  })),
+  on(InscripcioneActions.loadInscripcionesByCourseIdFailure, (state, action) => ({
+    ...state,
+    isLoading: false,
+    error: action.error,
+  }))
+
+
 );
 
 export const inscripcioneFeature = createFeature({

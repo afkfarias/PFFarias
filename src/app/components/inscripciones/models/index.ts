@@ -1,14 +1,17 @@
 import { FormControl } from "@angular/forms";
 import { IAlumno } from "../../alumnos/models";
 import { ICurso } from "../../cursos/models";
+import { IUser } from "../../users/models";
 
 export interface IInscripcion {
   id: string;
-  alumno?: IAlumno;
-  curso?: ICurso;
-  alumnoId: string;
-  cursoId:string;
+  student?: IAlumno;
+  course?: ICurso;
+  studentId: string;
+  courseId:string;
   fechaInscripcion: Date;
+  userId: string;
+  user: IUser;
 }
 
 export interface IInscripcionForm {
@@ -17,7 +20,8 @@ export interface IInscripcionForm {
 }
 
 export interface ICreateInscripcionData {
-  alumno?: IAlumno | null;
-  curso?: ICurso | null;
+  studentId?: string | null;
+  courseId?: string | null;
   fechaInscripcion: Date | null;
+  userId?: string | null;
 }

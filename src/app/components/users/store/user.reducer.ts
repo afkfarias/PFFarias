@@ -38,6 +38,67 @@ export const reducer = createReducer(
       loadingUsers: false
     };
   }),
+
+  on(UserActions.createUser, (state) =>  {
+    return {
+      ...state,
+      isLoading: true,
+    };
+  }),
+
+  on(UserActions.createUserSuccess, (state, action) =>  {
+    return {
+      ...state,
+      isLoading: false,
+      users: [...state.users, action.data],
+    };
+  }),
+
+  on(UserActions.createUserFailure, (state, action) => {
+    return {
+      ...state,
+      isLoading: false,
+      error: action.error,
+    };
+  }),
+
+  on(UserActions.deleteUserById, (state) => ({
+    ...state,
+    isLoading: true,
+  })),
+  on(UserActions.deleteUserByIdSuccess, (state, action) => ({
+    ...state,
+    isLoading: false,
+    users: state.users.filter((el) => el.id !== action.data.id),
+  })),
+  on(UserActions.deleteUserByIdFailure, (state, action) => ({
+    ...state,
+    isLoading: false,
+    error: action.error,
+  })),
+
+  on(UserActions.updateUser, (state) =>  {
+    return {
+      ...state,
+      isLoading: true,
+    };
+  }),
+
+  on(UserActions.updateUserSuccess, (state, action) =>  {
+    return {
+      ...state,
+      isLoading: false,
+      users: state.users.map(user => user.id === action.data.id ? action.data : user),
+    };
+  }),
+
+  on(UserActions.updateUserFailure, (state, action) => {
+    return {
+      ...state,
+      isLoading: false,
+      error: action.error,
+    };
+  }),
 );
 
 export const userFeature = createFeature({

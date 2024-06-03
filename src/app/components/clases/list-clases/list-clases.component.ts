@@ -45,12 +45,10 @@ export class ListClasesComponent {
         next: (result) => {
           if (result) {
             if (editAlumno) {
-              console.log(editAlumno)
               this.clases = this.clases.map((u) =>
                 u.id === editAlumno.id ? { ...u, ...result } : u
               );
             } else {
-              console.log(result)
               result.id = this.idNewAlumno;
               this.idNewAlumno++;
               result.createdAt = new Date();

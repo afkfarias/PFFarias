@@ -6,6 +6,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { AlumnosService } from '../../../core/alumnos/alumnos.service';
 import { isNgTemplate } from '@angular/compiler';
 import Swal from 'sweetalert2';
+import { Observable } from 'rxjs';
+import { IUser } from '../../users/models';
+import { Store } from '@ngrx/store';
+import { authUser } from '../../../store/auth/auth.selectors';
+import { selectAlumnos, selectIsLoading } from '../store/alumno.selectors';
+import { AlumnoActions } from '../store/alumno.actions';
 
 @Component({
   selector: 'app-list-alumnos',
@@ -13,8 +19,11 @@ import Swal from 'sweetalert2';
   styleUrl: './list-alumnos.component.scss'
 })
 export class ListAlumnosComponent implements OnInit{
-  //idNewAlumno = 4;
+  authUser$: Observable<IUser | null>;
   alumnos: IAlumno[] = [];
+
+  loadingAlumnos$: Observable<boolean>;
+  alumnos$: Observable<IAlumno[]>;
 
   displayedColumns: string[] = [
     'id',
@@ -25,44 +34,35 @@ export class ListAlumnosComponent implements OnInit{
     'actions',
   ];
 
-  constructor(private matDialog: MatDialog, private alumnosService: AlumnosService) {}
+  constructor(private matDialog: MatDialog, private alumnosService: AlumnosService, 
+    private store: Store) {
+      this.authUser$ = this.store.select(authUser);
+      this.alumnos$ = this.store.select(selectAlumnos);
+      this.loadingAlumnos$ = this.store.select(selectIsLoading);
+    }
 
   ngOnInit(): void {
     this.loadAlumnos();
   }
 
   loadAlumnos() {
-    this.alumnosService.getAlumnos().subscribe({
-      next: (alumnos) => {
-        this.alumnos = alumnos;
-      }
-    })
+    this.store.dispatch( AlumnoActions.loadAlumnos());
   }
 
-  openDialog(editAlumno?: IAlumno): void {
+  openDialog(editAlumno?: IAlumno, editMode?: boolean): void {
     this.matDialog
       .open(AlumnoDetailComponent, {
-        data: editAlumno,
+        data: {editAlumno, editMode},
       })
       .afterClosed()
       .subscribe({
         next: (result) => {
           if (result) {
             if (editAlumno) {
-              console.log(editAlumno)
-              this.alumnosService.updateAlumnos(editAlumno.id, result).subscribe( (alumno) => {
-                this.alumnosService.getAlumnos().subscribe( (alumnos) => {
-                  this.alumnos = alumnos;
-                });
-              })
+              this.store.dispatch(AlumnoActions.updateAlumno({id:editAlumno.id, payload:result}))
             } else {
-              console.log(result)
               result.createdAt = new Date();
-              this.alumnosService.createAlumnos(result).subscribe({
-                next: (alumnoCreado) => {
-                  this.alumnos = [...this.alumnos, alumnoCreado];
-                },
-              })
+              this.store.dispatch( AlumnoActions.createAlumno({payload: result}));
             }
           }
         },
@@ -79,16 +79,7 @@ export class ListAlumnosComponent implements OnInit{
       confirmButtonText: "Aceptar"
     }).then((result) => {
       if (result.isConfirmed) {
-        this.alumnosService.deleteAlumnos(id).subscribe((alumno) => {
-          this.alumnosService.getAlumnos().subscribe( (alumnos) => {
-            this.alumnos = alumnos
-          });
-          Swal.fire({
-          title: "Eliminado!",
-          text: "El alumno ha sido eliminado.",
-          icon: "success"
-          });
-        })
+        this.store.dispatch(AlumnoActions.deleteAlumnoById({id}));
       }
     });
   }

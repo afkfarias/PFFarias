@@ -20,7 +20,7 @@
     </mat-card-header>    
   </mat-card> -->
 
-  <mat-card class="example-card m-5" routerLink="usuarios">
+  <mat-card *ngIf="(authUser$ | async)?.role === 'ADMIN'" class="example-card m-5" routerLink="usuarios">
     <img mat-card-image src="../assets/clases.jpg">
     <mat-card-header>
       <mat-card-title>Gestión de Usuarios</mat-card-title>

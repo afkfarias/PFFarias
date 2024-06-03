@@ -39,4 +39,17 @@ export class UsersService {
 
     return this.httpClient.get<IUser[]>(environment.baseAPIURL + '/users', { params });
   }
+
+  deleteUser(id: string) {
+    return this.httpClient.delete<IUser>(
+      environment.baseAPIURL + '/users/' + id
+    );
+  }
+
+  updateUser(id: string, data: IUser) {
+    return this.httpClient.put<IUser>(
+      environment.baseAPIURL + '/users/' + id,
+      data
+    );
+  }
 }

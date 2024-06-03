@@ -6,7 +6,8 @@ import Swal from 'sweetalert2';
 import { UsersService } from '../../../core/usuarios/users.service';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectLoadingUsers } from '../store/user.selectors';
+import { selectLoadingUsers, selectUserList } from '../store/user.selectors';
+import { UserActions } from '../store/user.actions';
 
 @Component({
   selector: 'app-users',
@@ -28,6 +29,7 @@ export class UsersComponent implements OnInit {
 
   loading = false;
   loadingUsers$ : Observable<boolean>;
+  users$: Observable<IUser[]>;
 
   users: IUser[] = [];
 
@@ -37,57 +39,46 @@ export class UsersComponent implements OnInit {
     private store: Store
   ) {
     this.loadingUsers$ = this.store.select(selectLoadingUsers);
+    this.users$ = this.store.select(selectUserList);
   }
 
   ngOnInit(): void {
     this.loading = true;
-    this.usersService.getUsers().subscribe({
-      next: (users) => {
-        console.log('next: ', users);
-        this.users = users;
-      },
-      error: (err) => {
-        console.log('error: ', err);
-        Swal.fire('Error', 'Ocurrio un error', 'error');
-      },
-      complete: () => {
-        console.log('complete');
-        this.loading = false;
-      },
-    });
+    this.store.dispatch(UserActions.loadUsers());
   }
 
-  openDialog(editingUser?: IUser): void {
+  openDialog(editingUser?: IUser, editMode?: boolean): void {
     this.matDialog
       .open(UserDetailComponent, {
-        data: editingUser,
+        data: {editingUser, editMode},
       })
       .afterClosed()
       .subscribe({
         next: (result) => {
           if (result) {
             if (editingUser) {
-              // ACTUALIZAR EL USUARIO EN EL ARRAY
-              this.users = this.users.map((u) =>
-                u.id === editingUser.id ? { ...u, ...result } : u
-              );
+              this.store.dispatch( UserActions.updateUser({id: editingUser.id , payload: result}))
             } else {
-              // LOGICA DE CREAR EL USUARIO
               result.createdAt = new Date();
-              this.usersService.createUser(result).subscribe({
-                next: (usuarioCreado) => {
-                  this.users = [...this.users, usuarioCreado];
-                },
-              });
+              this.store.dispatch( UserActions.createUser({payload: result}));
             }
           }
         },
       });
   }
 
-  onDeleteUser(id: number): void {
-    if (confirm('Esta seguro?')) {
-      this.users = this.users.filter((u) => u.id != id);
-    }
+  onDeleteUser(id: string): void {
+    Swal.fire({
+      title: "Esta seguro de eliminar el usuario?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Aceptar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.store.dispatch( UserActions.deleteUserById({id}));
+      }
+    })
   }
 }

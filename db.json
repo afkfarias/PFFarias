@@ -1,89 +1,122 @@
 {
   "users": [
     {
-      "id": "4",
-      "firstName": "pruebaend",
-      "lastName": "pruebaend",
-      "email": "pruebaend@gmail.com",
-      "password": "prueba",
-      "role": "USER",
+      "firstName": "Fernando",
+      "lastName": "Fernandez",
       "address": "Rodolfo Reyna 711",
       "phone": "3512187321",
-      "gender": "M",
-      "createdAt": "2024-05-25T22:33:17.898Z"
+      "email": "fernando@gmail.com",
+      "password": "prueba",
+      "role": "USER",
+      "id": "4"
     },
     {
-      "id": "3a07",
-      "firstName": "alexis",
-      "lastName": "farias",
+      "firstName": "Alexis",
+      "lastName": "Farias",
       "address": "av colon 132",
       "phone": "3512891723",
       "email": "alexis@gmail.com",
       "password": "alexis",
       "role": "ADMIN",
-      "createdAt": "2024-06-01T14:02:21.482Z"
+      "id": "3a07"
     }
   ],
   "students": [
     {
-      "firstName": "prueba",
-      "lastName": "prueba",
-      "email": "prueba@gmail.com",
+      "firstName": "Julian",
+      "lastName": "Alvarez",
+      "email": "julian@gmail.com",
       "gender": "M",
       "perfil": "Desarrollador",
       "id": "b8b5"
     },
     {
-      "firstName": "newalum",
-      "lastName": "new",
-      "email": "new@mail.com",
+      "firstName": "Maria",
+      "lastName": "Aballay",
+      "email": "maria@mail.com",
       "gender": "F",
       "perfil": "IT",
       "id": "5a1f"
+    },
+    {
+      "firstName": "José",
+      "lastName": "Perez",
+      "email": "jose@gmail.com",
+      "gender": "F",
+      "perfil": "Usuario final",
+      "id": "2a75"
+    },
+    {
+      "id": "26c7",
+      "firstName": "Cristian",
+      "lastName": "Gallo",
+      "email": "cristian@gmail.com",
+      "gender": "M",
+      "perfil": "Usuario final",
+      "createdAt": "2024-06-03T23:26:20.346Z"
+    },
+    {
+      "id": "7304",
+      "firstName": "Alejo",
+      "lastName": "Carballo",
+      "email": "alejo@gmail.com",
+      "gender": "M",
+      "perfil": "Desarrollador",
+      "createdAt": "2024-06-03T23:32:39.241Z"
     }
   ],
   "courses": [
     {
-      "nombre": "nuevprueb",
+      "nombre": "Angular",
       "cantHs": "34",
       "cantClases": "24",
-      "tutor": "mengan",
+      "tutor": "Pablo Vélez",
       "id": "f4f2"
     },
     {
-      "id": "5c18",
-      "nombre": "new",
+      "nombre": "Java",
       "cantHs": "2",
       "cantClases": "4",
-      "tutor": "new",
-      "createdAt": "2024-05-26T00:32:45.110Z"
+      "tutor": "Manuel Serrano",
+      "id": "5c18"
+    },
+    {
+      "id": "f0f0",
+      "nombre": "Inglés",
+      "cantHs": "30",
+      "cantClases": "15",
+      "tutor": "Natalia Rivas",
+      "createdAt": "2024-06-03T23:27:01.721Z"
     }
   ],
   "registrations": [
     {
-      "id": "5a1f",
-      "courseId": "1",
-      "studentId": "2"
+      "id": "5fcf",
+      "studentId": "2a75",
+      "courseId": "f4f2",
+      "userId": "3a07",
+      "fechaInscripcion": "2024-06-03T21:52:37.504Z"
     },
     {
-      "id": "f78c",
-      "alumno": {
-        "firstName": "prueba",
-        "lastName": "prueba",
-        "email": "prueba@gmail.com",
-        "gender": "M",
-        "perfil": "Desarrollador",
-        "id": "b8b5"
-      },
-      "curso": {
-        "id": "5c18",
-        "nombre": "new",
-        "cantHs": "2",
-        "cantClases": "4",
-        "tutor": "new",
-        "createdAt": "2024-05-26T00:32:45.110Z"
-      },
-      "fechaInscripcion": "2024-06-03T02:03:22.513Z"
+      "id": "498b",
+      "studentId": "b8b5",
+      "courseId": "5c18",
+      "userId": "3a07",
+      "fechaInscripcion": "2024-06-03T22:00:00.916Z"
+    },
+    {
+      "id": "219d",
+      "studentId": "2a75",
+      "courseId": "5c18",
+      "userId": "3a07",
+      "fechaInscripcion": "2024-06-03T22:10:46.338Z"
+    },
+    {
+      "id": "2841",
+      "studentId": "26c7",
+      "courseId": "f0f0",
+      "userId": "4",
+      "fechaInscripcion": "2024-06-03T23:28:45.223Z"
     }
   ]
 }

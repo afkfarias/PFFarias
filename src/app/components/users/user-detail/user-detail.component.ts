@@ -11,12 +11,15 @@ import { IUser } from '../models';
 export class UserDetailComponent {
   userForm: FormGroup;
   hide=true;
+  isEditMode: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
     private matDialogRef: MatDialogRef<UserDetailComponent>,
-    @Inject(MAT_DIALOG_DATA) private editingUser?: IUser
+    @Inject(MAT_DIALOG_DATA) private data: {editingUser?: IUser, editMode: boolean}
   ) {
+    this.isEditMode = data.editMode;
+
     this.userForm = this.formBuilder.group({
       firstName: [
         '',
@@ -62,8 +65,12 @@ export class UserDetailComponent {
       role: ['USER', [Validators.required]],
     });
 
-    if (editingUser) {
-      this.userForm.patchValue(editingUser);
+    if (data.editingUser) {
+      this.userForm.patchValue(data.editingUser);
+    }
+
+    if (!this.isEditMode) {
+      this.userForm.disable();
     }
   }
 
