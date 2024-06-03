@@ -5,8 +5,23 @@
       "firstName": "pruebaend",
       "lastName": "pruebaend",
       "email": "pruebaend@gmail.com",
+      "password": "prueba",
+      "role": "USER",
+      "address": "Rodolfo Reyna 711",
+      "phone": "3512187321",
       "gender": "M",
       "createdAt": "2024-05-25T22:33:17.898Z"
+    },
+    {
+      "id": "3a07",
+      "firstName": "alexis",
+      "lastName": "farias",
+      "address": "av colon 132",
+      "phone": "3512891723",
+      "email": "alexis@gmail.com",
+      "password": "alexis",
+      "role": "ADMIN",
+      "createdAt": "2024-06-01T14:02:21.482Z"
     }
   ],
   "students": [
@@ -44,5 +59,31 @@
       "createdAt": "2024-05-26T00:32:45.110Z"
     }
   ],
-  "registrations": []
+  "registrations": [
+    {
+      "id": "5a1f",
+      "courseId": "1",
+      "studentId": "2"
+    },
+    {
+      "id": "f78c",
+      "alumno": {
+        "firstName": "prueba",
+        "lastName": "prueba",
+        "email": "prueba@gmail.com",
+        "gender": "M",
+        "perfil": "Desarrollador",
+        "id": "b8b5"
+      },
+      "curso": {
+        "id": "5c18",
+        "nombre": "new",
+        "cantHs": "2",
+        "cantClases": "4",
+        "tutor": "new",
+        "createdAt": "2024-05-26T00:32:45.110Z"
+      },
+      "fechaInscripcion": "2024-06-03T02:03:22.513Z"
+    }
+  ]
 }

@@ -6,6 +6,9 @@ import { AlumnoDetailComponent } from './alumno-detail/alumno-detail.component';
 const routes: Routes = [
   {
     path: '',
+    data: {
+      title: 'Listado de alumnos',
+    },
     component: ListAlumnosComponent,
   },
   {

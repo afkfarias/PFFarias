@@ -4,6 +4,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserDetailComponent } from '../user-detail/user-detail.component';
 import Swal from 'sweetalert2';
 import { UsersService } from '../../../core/usuarios/users.service';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectLoadingUsers } from '../store/user.selectors';
 
 @Component({
   selector: 'app-users',
@@ -16,19 +19,25 @@ export class UsersComponent implements OnInit {
     'firstName',
     'lastName',
     'email',
+    'address',
+    'phone',
     'role',
     'createdAt',
     'actions',
   ];
 
   loading = false;
+  loadingUsers$ : Observable<boolean>;
 
   users: IUser[] = [];
 
   constructor(
     private matDialog: MatDialog,
-    private usersService: UsersService
-  ) {}
+    private usersService: UsersService,
+    private store: Store
+  ) {
+    this.loadingUsers$ = this.store.select(selectLoadingUsers);
+  }
 
   ngOnInit(): void {
     this.loading = true;

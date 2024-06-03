@@ -1,41 +1,43 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { LoginData, IUser } from '../../components/auth/models';
+import { LoginData } from '../../components/auth/models';
+import { IUser } from '../../components/users/models';
 import { Router } from '@angular/router';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { UsersService } from '../usuarios/users.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private MOCK_AUTH_USER: IUser = {
-    id: 1,
-    createdAt: new Date(),
-    email: 'email@mail.com',
-    firstName: 'Usuario Prueba',
-    lastName: 'Farías',
-    role: 'ADMIN',
-  };
 
   private _authUser$ = new BehaviorSubject<IUser | null>(null);
   public authUser$ = this._authUser$.asObservable();
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private userService: UsersService) {}
 
   login(data: LoginData): void {
-    if (data.email !== 'user@mail.com' || data.password !== '123456') {
-      alert('Correo o password incorrectos');
-    } else {
-      this._authUser$.next(this.MOCK_AUTH_USER);
-      localStorage.setItem(
-        'accessToken',
-        'fdskfdsjkmngfunudsijfdsioufjsdoifdsyhfds'
-      );
-      this.router.navigate(['nav', 'home']);
+    if(data.email && data.password){
+      this.userService.getUserByEmailAndPassword(data.email, data.password).subscribe( {
+        next:(user) =>
+          {
+            if(user && user?.length>0){
+              this._authUser$.next(user[0])
+            }
+        },
+        complete: () => 
+           {
+              localStorage.setItem(
+              'accessToken',
+              'fdskfdsjkmngfunudsijfdsioufjsdoifdsyhfds'),
+              this.router.navigate(['nav', 'home'])
+        }
+        })
     }
+    
   }
 
   verifyToken(): boolean {
     const token = localStorage.getItem('accessToken');
     if (token) {
-      this._authUser$.next(this.MOCK_AUTH_USER);
       return true;
     } else {
       return false;

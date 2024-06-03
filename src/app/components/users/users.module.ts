@@ -6,6 +6,10 @@ import { UsersComponent } from './list-usuarios/users.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { SharedModule } from '../../shared/shared.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { StoreModule } from '@ngrx/store';
+import { userFeature } from './store/user.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { UserEffects } from './store/user.effects';
 
 @NgModule({
   declarations: [UsersComponent, UserDetailComponent],
@@ -14,6 +18,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     UsersRoutingModule,
     SharedModule,
     MatProgressSpinnerModule,
+    StoreModule.forFeature(userFeature),
+    EffectsModule.forFeature([UserEffects])
   ],
   exports: [UsersComponent],
 })

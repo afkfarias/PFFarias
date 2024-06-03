@@ -10,7 +10,7 @@
         <mat-form-field class="w-100 p-2" appearance="fill">
           <mat-label>Nombre</mat-label>
           <input formControlName="firstName" matInput />
-          <mat-hint>El nombre debe tener al menos 6 caracteres</mat-hint>
+          <mat-hint>El nombre debe tener al menos 3 caracteres</mat-hint>
           <mat-error>{{
             firstNameControl?.errors | formFieldValidation
           }}</mat-error>
@@ -22,6 +22,24 @@
           <input formControlName="lastName" matInput />
           <mat-error>{{
             lastNameControl?.errors | formFieldValidation
+          }}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field class="w-100 p-2" appearance="fill">
+          <mat-label>Dirección</mat-label>
+          <input formControlName="address" matInput />
+          <mat-error>{{
+            userForm.get("address")?.errors | formFieldValidation
+          }}</mat-error>
+        </mat-form-field>
+      </div>
+     <div class="col-6">
+        <mat-form-field class="w-100 p-2" appearance="fill">
+          <mat-label>Teléfono</mat-label>
+          <input formControlName="phone" matInput />
+          <mat-error>{{
+            userForm.get("phone")?.errors | formFieldValidation
           }}</mat-error>
         </mat-form-field>
       </div>
@@ -41,6 +59,16 @@
             <mat-option value="ADMIN">ADMIN</mat-option>
             <mat-option value="USER">USER</mat-option>
           </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-6">
+        <mat-form-field class="w-100 p-2" appearance="fill">
+          <mat-label>Password</mat-label>
+          <input formControlName="password" matInput [type]="hide ? 'password' : 'text'" />
+          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-error>{{
+            userForm.get("password")?.errors | formFieldValidation
+          }}</mat-error>
         </mat-form-field>
       </div>
     </div>

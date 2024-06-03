@@ -10,6 +10,7 @@ import { IUser } from '../models';
 })
 export class UserDetailComponent {
   userForm: FormGroup;
+  hide=true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -22,18 +23,40 @@ export class UserDetailComponent {
         [
           Validators.required,
           Validators.pattern('^[a-zA-ZÁÉÍÓÚáéíóúñÑ]+$'),
-          Validators.maxLength(5),
+          Validators.minLength(3),
+          Validators.maxLength(20),
         ],
       ],
       lastName: [
         '',
         [Validators.required, Validators.pattern('^[a-zA-ZÁÉÍÓÚáéíóúñÑ]+$')],
       ],
+      address: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(50),
+        ],
+      ],
+      phone: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(10),
+        ],
+      ],
       email: [
         '',
         [
           Validators.required,
           Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}'),
+        ],
+      ],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(10),
         ],
       ],
       role: ['USER', [Validators.required]],
@@ -50,6 +73,18 @@ export class UserDetailComponent {
 
   get lastNameControl() {
     return this.userForm.get('lastName');
+  }
+
+  get addressControl() {
+    return this.userForm.get('address');
+  }
+
+  get phoneControl() {
+    return this.userForm.get('phone');
+  }
+
+  get passwordControl() {
+    return this.userForm.get('password');
   }
 
   onSave(): void {

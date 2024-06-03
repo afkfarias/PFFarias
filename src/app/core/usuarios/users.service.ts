@@ -10,7 +10,7 @@ import {
   of,
   throwError,
 } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -30,5 +30,13 @@ export class UsersService {
       `${environment.baseAPIURL}/users`,
       payload
     );
+  }
+
+  getUserByEmailAndPassword(email: string, password: string): Observable<IUser[]> { //Se envian ambos parametros aunque JSON-SERVER solo limita la busqueda a email
+    let params = new HttpParams();
+    params = params.append('email', email);
+    params = params.append('password', password);
+
+    return this.httpClient.get<IUser[]>(environment.baseAPIURL + '/users', { params });
   }
 }
